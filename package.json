@@ -1,0 +1,10 @@
+{
+  "name": "ntn-orbit-lab",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "python3 -m http.server 4173",
+    "build:wasm": "emcc cpp/ntn_core.cpp -O3 -s WASM=1 -s MODULARIZE=1 -s EXPORT_NAME=NtnCore -s EXPORTED_FUNCTIONS='[\"_estimate_link\",\"_coverage_radius_km\"]' -o src/ntn_core_wasm.js"
+  }
+}

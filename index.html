@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NTN Orbit Lab</title>
+    <link rel="stylesheet" href="./src/styles.css" />
+  </head>
+  <body>
+    <main id="app">
+      <section id="scene-wrap" aria-label="NTN 3D simulator">
+        <canvas id="scene"></canvas>
+        <div id="altitude-scale" aria-label="log altitude scale"></div>
+        <div id="event-log" aria-live="polite"></div>
+      </section>
+
+      <header class="topbar">
+        <strong>NTN Orbit Lab</strong>
+        <button id="pauseBtn" type="button">Pause</button>
+        <button id="speedBtn" type="button">1x</button>
+        <label>
+          Band
+          <button class="help-btn" type="button" data-term="Band Preset" data-help="Band preset은 S/Ku/Ka처럼 자주 쓰이는 위성 주파수 대역을 빠르게 바꾸는 장치입니다. 주파수를 올리면 같은 상대속도에서도 Doppler shift가 커지고, 같은 거리에서도 free-space path loss가 커집니다. 반대로 낮은 주파수는 링크 예산에 유리한 면이 있지만 사용 가능한 대역폭이 제한될 수 있습니다. 교육용으로 대역을 바꿔 보며 Doppler, FSPL, throughput이 함께 움직이는 구조를 확인합니다." aria-label="Band 설명 보기">?</button>
+          <select id="bandSelect">
+            <option value="s">S 2.2 GHz</option>
+            <option value="ku">Ku 12 GHz</option>
+            <option value="ka">Ka 28 GHz</option>
+            <option value="custom">Custom</option>
+          </select>
+        </label>
+        <label>
+          GHz
+          <button class="help-btn" type="button" data-term="Carrier Frequency" data-help="Carrier frequency는 실제 전파가 실리는 중심 주파수입니다. 값을 올리면 Doppler shift가 거의 비례해서 커지고, free-space path loss도 증가합니다. 고주파 대역은 넓은 bandwidth를 확보하기 좋지만, tracking, beam pointing, link budget 관리가 더 까다로워집니다. 같은 위성 위치와 같은 UE라도 GHz 값을 바꾸면 Doppler Hz, FSPL dB, SINR, throughput이 동시에 바뀌는 것을 확인할 수 있습니다." aria-label="GHz 설명 보기">?</button>
+          <input id="freqInput" type="number" min="0.1" max="60" step="0.1" value="2.2" />
+        </label>
+        <button id="leoHelpBtn" type="button">?</button>
+      </header>
+
+      <aside class="panel left-panel">
+        <div class="panel-title">
+          <span>Ground UEs</span>
+          <small>drag on map</small>
+        </div>
+        <div id="ueControls"></div>
+      </aside>
+
+      <aside class="panel right-panel">
+        <div class="panel-title">
+          <span id="selectedTitle">Selected Link</span>
+          <small id="selectedHint">click satellite or UE</small>
+        </div>
+        <div id="metrics"></div>
+      </aside>
+
+      <section class="panel theory-panel">
+        <button id="theoryToggle" type="button">
+          <span>NTN Ephemeris TMI</span>
+          <small>?</small>
+        </button>
+        <div id="theoryContent"></div>
+      </section>
+
+      <section class="panel lexical-panel">
+        <div class="panel-title">
+          <span id="lexicalTitle">Ephemeris</span>
+          <small>selected ?</small>
+        </div>
+        <p id="lexicalText"></p>
+      </section>
+
+      <dialog id="orbitDialog">
+        <form method="dialog">
+          <h2>LEO / MEO / GEO 역할</h2>
+          <p><b>LEO</b>는 낮고 빠릅니다. 지연은 작지만 도플러와 handover가 큽니다.</p>
+          <p><b>MEO</b>는 중간입니다. coverage가 넓어지고 움직임은 느려지지만 지연은 늘어납니다.</p>
+          <p><b>GEO</b>는 이 도시 패치 전체를 덮는 기준 위성으로 고정합니다. 비교용이며 고도 조작 대상이 아닙니다.</p>
+          <p>화면의 고도 눈금은 log10 압축 스케일입니다. 계산은 실제 km, Hz, dB, 초 단위로 수행합니다.</p>
+          <button>Close</button>
+        </form>
+      </dialog>
+    </main>
+    <script type="module" src="./src/app.js"></script>
+  </body>
+</html>
